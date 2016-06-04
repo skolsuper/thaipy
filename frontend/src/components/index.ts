@@ -3,3 +3,4 @@ export * from './chatmessage.component.ts';
 export * from './humanize.filter.ts';
 export * from './messagebox.component.ts';
 export * from './serverinfo.component.ts';
+export * from './usernamebox.component.ts';

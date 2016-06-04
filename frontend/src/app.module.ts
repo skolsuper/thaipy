@@ -13,7 +13,9 @@ angular.module('thaiPyDemo', [
   .component('chatHistory', components.chatHistoryComponent)
   .component('chatMessage', components.chatMessageComponent)
   .component('serverInfo', components.serverInfoComponent)
+  .component('usernameBox', components.usernameBoxComponent)
   .filter('humanizeAgo', components.humanizeAgoFilter)
-  .service('SocketService', services.SocketService)
+  .service('AuthService', services.AuthService)
   .service('MessagesService', services.MessagesService)
+  .service('SocketService', services.SocketService)
 ;
