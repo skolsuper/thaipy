@@ -10,6 +10,7 @@ class usernameBoxController {
 export const usernameBoxComponent: ng.IComponentOptions = {
   template:
     `<div class="input-group">
+      <label>Post as:</label>
       <input type="text" class="form-control" placeholder="Name"
              ng-model="username" ng-change="$ctrl.updateUsername(username)">
     </div>`,

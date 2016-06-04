@@ -3,5 +3,6 @@
 
 
 import 'bootstrap/scss/bootstrap.scss';
+import './main.scss';
 
 import './app.module.ts';
