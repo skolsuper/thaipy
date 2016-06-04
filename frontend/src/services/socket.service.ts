@@ -22,6 +22,7 @@ export class SocketService implements app.ISocketService {
   }
 
   sendMessage(message) {
+    this.$log.debug('sending message:', message);
     if (this.connected){
       const data: string = angular.toJson(message);
       this.stream.send(data);
