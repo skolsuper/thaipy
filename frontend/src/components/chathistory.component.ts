@@ -12,11 +12,7 @@ class chatHistoryController {
   }
 
   private getMessages() {
-    return [
-      {id: '1', username: 'Tom', message: 'Hello Harry', timestamp: 'a'},
-      {id: '2', username: 'Harry', message: 'Hello Tom', timestamp: 'a'},
-    ];
-    // return this.MessagesService.get();
+    return this.MessagesService.get();
   }
 }
 

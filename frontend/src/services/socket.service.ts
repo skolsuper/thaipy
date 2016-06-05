@@ -2,22 +2,35 @@ export class SocketService implements app.ISocketService {
 
   private stream;
   private connected: boolean = false;
+  private shouldReconnect: boolean = true;
 
   constructor(private $log: ng.ILogService,
+              private $rootScope: ng.IRootScopeService,
               private $timeout: ng.ITimeoutService,
               private $websocket,
-              private MessagesService: app.IMessageService) { 'ngInject';}
+              private MessagesService: app.IMessageService) {
+    'ngInject';
+    $rootScope.$on('$destroy', () => {
+      this.$log.debug('Shutting down');
+      this.shouldReconnect = false;
+      if (this.connected) {
+        this.stream.close();
+      }
+    });
+  }
 
   connect(url) {
     this.stream = this.$websocket(url);
     this.stream.onOpen(() => this.onConnect());
-    this.stream.onMessage((response: string) => {
-      const message: app.IWebsocketMessage = angular.fromJson(response);
+    this.stream.onMessage((response) => {
+      const message: app.IWebsocketMessage = angular.fromJson(response.data);
       this.processMessage(message);
     });
     this.stream.onClose(() => {
       this.connected = false;
-      this.$timeout(() => this.connect(url), 1000);
+      if (this.shouldReconnect) {
+        this.$timeout(() => this.connect(url), 1000);
+      }
     });
   }
 

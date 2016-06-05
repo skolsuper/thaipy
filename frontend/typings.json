@@ -1,8 +1,7 @@
 {
   "name": "thaipy_demo",
   "dependencies": {
-    "moment": "registry:npm/moment#2.10.5+20160211003958",
-    "ramda": "registry:npm/ramda#0.21.0+20160531162943"
+    "moment": "registry:npm/moment#2.10.5+20160211003958"
   },
   "globalDependencies": {
     "angular": "registry:dt/angular#1.5.0+20160602160139",

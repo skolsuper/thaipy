@@ -4,6 +4,7 @@ import 'angular-websocket';
 
 import * as components from './components/index.ts';
 import * as services from './services/index.ts';
+import {startApp} from './app.run.ts';
 
 angular.module('thaiPyDemo', [
   'ngAnimate',
@@ -18,4 +19,5 @@ angular.module('thaiPyDemo', [
   .service('AuthService', services.AuthService)
   .service('MessagesService', services.MessagesService)
   .service('SocketService', services.SocketService)
+  .run(startApp)
 ;
