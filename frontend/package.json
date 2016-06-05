@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:prod": "webpack -p",
+    "build:prod": "webpack -p --output-public-path='/dist/'",
     "start": "webpack-dev-server --inline --host 0.0.0.0 --port 8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
