@@ -1,3 +1,6 @@
+import {findIndex, propEq} from 'ramda';
+
+
 export class MessagesService implements app.IMessageService {
 
   private messages: app.IMessage[] = [];
@@ -8,21 +11,10 @@ export class MessagesService implements app.IMessageService {
     return this.messages;
   }
 
-  add(message) {
-    if (this.findIndex((existing) => existing.id === message.id, this.messages) === -1) {
-      this.messages.push(message);
-      this.$rootScope.$broadcast('message-received', message);
+  add(newMessage) {
+    if (findIndex(propEq('id', newMessage.id), this.messages) === -1) {
+      this.messages.push(newMessage);
+      this.$rootScope.$broadcast('message-received', newMessage);
     }
-  }
-
-  private findIndex(predicate: (a: any) => boolean, list: any[]) {
-    let index = 0;
-    for (const obj in list) {
-      if (predicate(obj)) {
-        return index;
-      }
-      ++index;
-    }
-    return -1;
   }
 }
