@@ -1,7 +1,7 @@
 declare module app {
 
   interface IConnectionInfo {
-    server: string
+    name: string
   }
 
   interface IWebsocketMessage {
@@ -13,5 +13,6 @@ declare module app {
     connect(url: string): void
     sendMessage(message: app.IUnsentMessage): void
     connected: boolean
+    serverName: string
   }
 }

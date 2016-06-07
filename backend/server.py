@@ -18,7 +18,9 @@ async def main_handler(request):
 
     server_info_message = {
         'info': 'server',
-        'data': 'red',
+        'data': {
+            'name': os.environ.get('SERVER_NAME', 'Wedge'),
+        },
     }
     ws.send_str(json.dumps(server_info_message))
 

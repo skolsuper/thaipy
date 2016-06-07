@@ -3,6 +3,7 @@ export class SocketService implements app.ISocketService {
   private stream;
   private shouldReconnect: boolean = true;
   public connected = false;
+  public serverName;
 
   constructor(private $log: ng.ILogService,
               private $rootScope: ng.IRootScopeService,
@@ -52,6 +53,9 @@ export class SocketService implements app.ISocketService {
     switch (message.info) {
       case 'message':
         this.MessagesService.add(message.data as app.IMessage);
+        break;
+      case 'server':
+        this.serverName = (message.data as app.IConnectionInfo).name;
         break;
     }
   }

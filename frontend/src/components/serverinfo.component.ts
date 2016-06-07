@@ -2,7 +2,7 @@ class serverInfoController {
   constructor(private SocketService: app.ISocketService) {'ngInject';}
 
   getServerName(): string {
-    return 'red';
+    return this.SocketService.serverName;
   }
 }
 
