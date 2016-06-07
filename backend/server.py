@@ -35,6 +35,12 @@ async def main_handler(request):
         },
     }
     ws.send_str(json.dumps(server_info_message))
+    async for oldMessage in Message.objects.all().limit(20):
+        outgoing_message_data = {
+            'info': 'message',
+            'data': oldMessage.to_db()
+        }
+        ws.send_str(json.dumps(outgoing_message_data))
 
     async for msg in ws:
         if msg.tp == aiohttp.MsgType.text:
