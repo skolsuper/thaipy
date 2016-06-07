@@ -2,16 +2,28 @@ import asyncio
 import json
 import os
 import random
-import uuid
 from typing import MutableSet
 
-import arrow
 import aiohttp
+import arrow
+import resync
 from aiohttp import web
+from resync.diff import Diff, create
+from resync.fields import StrField
+from resync.listener import ChangeListener
+from resync.models import Model
 
 SERVER_NAME = random.choice(['Wedge', 'Dak', 'Derek', 'Wes', 'Zev', 'Luke'])
 
 ws_listeners = set()  # type: MutableSet[web.WebSocketResponse]
+
+
+class Message(Model):
+
+    id = StrField()
+    username = StrField()
+    message = StrField()
+    timestamp = StrField(default=arrow.utcnow)
 
 
 async def main_handler(request):
@@ -39,32 +51,44 @@ async def main_handler(request):
     return ws
 
 
-async def process_incoming_chat_message(message: str):
+async def process_incoming_chat_message(data: str):
+    message_data = json.loads(data)
+    await Message.objects.create(**message_data)
+
+
+async def new_message_listener(message: Message, diff: Diff):
     global ws_listeners
-    chat_message = json.loads(message)
-    chat_message['id'] = str(uuid.uuid4())
-    chat_message['timestamp'] = arrow.utcnow().isoformat()
-    outgoing_message = {
-        'info': 'message',
-        'data': chat_message
-    }
-    errors = set()
-    for ws in ws_listeners:
-        try:
-            ws.send_str(json.dumps(outgoing_message))
-        except RuntimeError:
-            errors.add(ws)
-    ws_listeners -= errors
+    if diff is create:
+        outgoing_message_data = {
+            'info': 'message',
+            'data': message.to_db()
+        }
+        errors = set()
+        for ws in ws_listeners:
+            try:
+                ws.send_str(json.dumps(outgoing_message_data))
+            except RuntimeError:
+                errors.add(ws)
+        ws_listeners -= errors
 
 
 def main():
+    resync.setup({
+        'host': os.environ.get('RETHINK_HOST', 'localhost'),
+        'db': 'thaipy',
+    })
     loop = asyncio.get_event_loop()
     app = web.Application(loop=loop)
     app.router.add_route('GET', '/ws', main_handler)
 
+    db_listener = ChangeListener(Message.objects.all(), new_message_listener)
+    listen_task = asyncio.ensure_future(db_listener.listen())
+
     async def _on_shutdown(_app):
+        listen_task.cancel()
         for ws in ws_listeners:
             await ws.close(code=1001, message='Server shutdown')
+        await resync.teardown()
 
     app.on_shutdown.append(_on_shutdown)
 
