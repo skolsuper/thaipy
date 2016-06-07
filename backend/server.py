@@ -90,6 +90,9 @@ def main():
     db_listener = ChangeListener(Message.objects.all(), new_message_listener)
     listen_task = asyncio.ensure_future(db_listener.listen())
 
+    db_listener = ChangeListener(Message.objects.all(), new_message_listener)
+    listen_task = asyncio.ensure_future(db_listener.listen())
+
     async def _on_shutdown(_app):
         listen_task.cancel()
         for ws in ws_listeners:
