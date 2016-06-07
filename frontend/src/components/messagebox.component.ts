@@ -6,7 +6,11 @@ class messageBoxController {
               private SocketService: app.ISocketService) { 'ngInject';}
 
   canSend(): boolean {
-    return angular.isDefined(this.AuthService.username);
+    return (
+      angular.isDefined(this.AuthService.username) &&
+      this.SocketService.connected &&
+      !!this.message
+    );
   }
 
   sendMessage(): void {
@@ -16,6 +20,7 @@ class messageBoxController {
         message: this.message,
       };
       this.SocketService.sendMessage(unsentMessage);
+      this.message = '';
     }
   }
 }
@@ -25,9 +30,9 @@ export const messageBoxComponent: ng.IComponentOptions = {
     `<form novalidate ng-submit="$ctrl.sendMessage()">
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Write Message"
-               ng-model="$ctrl.message" ng-disabled="!$ctrl.canSend()">
+               ng-model="$ctrl.message">
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="submit">
+          <button class="btn btn-primary" type="submit" ng-disabled="!$ctrl.canSend()">
             Send
           </button>
         </span>

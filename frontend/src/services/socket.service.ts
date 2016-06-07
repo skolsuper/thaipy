@@ -1,8 +1,8 @@
 export class SocketService implements app.ISocketService {
 
   private stream;
-  private connected: boolean = false;
   private shouldReconnect: boolean = true;
+  public connected = false;
 
   constructor(private $log: ng.ILogService,
               private $rootScope: ng.IRootScopeService,
