@@ -1,0 +1,18 @@
+version: '2'
+services:
+  web:
+    build: ./frontend
+    ports:
+     - "5555:5555"
+    volumes:
+     - ./frontend/dist:/var/www
+    depends_on:
+     - app
+  app:
+    build: ./backend
+    expose:
+      - 8000
+    depends_on:
+      - rethink
+  rethink:
+    image: rethinkdb
