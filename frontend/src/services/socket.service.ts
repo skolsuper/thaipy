@@ -14,10 +14,7 @@ export class SocketService implements app.ISocketService {
     'ngInject';
     $rootScope.$on('$destroy', () => {
       this.$log.debug('Shutting down');
-      this.shouldReconnect = false;
-      if (this.connected) {
-        this.stream.close();
-      }
+      this.disconnect();
     });
   }
 
@@ -41,6 +38,13 @@ export class SocketService implements app.ISocketService {
     this.shouldReconnect = false;
     this.connected = false;
     this.stream.close();
+  }
+
+  disconnect() {
+    this.shouldReconnect = false;
+    if (this.connected) {
+      this.stream.close();
+    }
   }
 
   sendMessage(message) {
