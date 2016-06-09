@@ -1,12 +1,15 @@
 import asyncio
 import json
 import os
+import random
 import uuid
 from typing import MutableSet
 
 import arrow
 import aiohttp
 from aiohttp import web
+
+SERVER_NAME = random.choice(['Wedge', 'Dak', 'Derek', 'Wes', 'Zev', 'Luke'])
 
 ws_listeners = set()  # type: MutableSet[web.WebSocketResponse]
 
@@ -19,7 +22,7 @@ async def main_handler(request):
     server_info_message = {
         'info': 'server',
         'data': {
-            'name': os.environ.get('SERVER_NAME', 'Wedge'),
+            'name': SERVER_NAME,
         },
     }
     ws.send_str(json.dumps(server_info_message))
