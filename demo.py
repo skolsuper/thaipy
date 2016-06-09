@@ -24,7 +24,7 @@ def main():
     app.router.add_route('GET', '/slow', slow_handler)
     app.router.add_route('GET', '/fast', fast_handler)
 
-    web.run_app(app, port=8888)
+    web.run_app(app, port=4444)
 
 if __name__ == '__main__':
     main()
