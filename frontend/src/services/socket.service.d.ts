@@ -10,7 +10,8 @@ declare module app {
   }
 
   interface ISocketService {
-    connect(url: string): void
+    connect(): void
+    disconnect(): void
     sendMessage(message: app.IUnsentMessage): void
     connected: boolean
     serverName: string

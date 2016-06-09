@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname + "/src",
   entry: "./index.ts",
   output: {
-    path: __dirname + "/../dist",
+    path: __dirname + "/dist",
     filename: "app.js"
   },
   module: {

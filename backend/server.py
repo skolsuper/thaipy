@@ -60,7 +60,7 @@ async def process_incoming_chat_message(message: str):
 def main():
     loop = asyncio.get_event_loop()
     app = web.Application(loop=loop)
-    app.router.add_route('GET', '/', main_handler)
+    app.router.add_route('GET', '/ws', main_handler)
 
     async def _on_shutdown(_app):
         for ws in ws_listeners:

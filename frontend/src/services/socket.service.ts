@@ -9,7 +9,8 @@ export class SocketService implements app.ISocketService {
               private $rootScope: ng.IRootScopeService,
               private $timeout: ng.ITimeoutService,
               private $websocket,
-              private MessagesService: app.IMessageService) {
+              private MessagesService: app.IMessageService,
+              private $location: ng.ILocationService) {
     'ngInject';
     $rootScope.$on('$destroy', () => {
       this.$log.debug('Shutting down');
@@ -20,8 +21,9 @@ export class SocketService implements app.ISocketService {
     });
   }
 
-  connect(url) {
-    this.stream = this.$websocket(url);
+  connect() {
+    const WS_URL = `ws://${this.$location.host()}:${this.$location.port()}/ws`;
+    this.stream = this.$websocket(WS_URL);
     this.stream.onOpen(() => this.onConnect());
     this.stream.onMessage((response) => {
       const message: app.IWebsocketMessage = angular.fromJson(response.data);
@@ -30,7 +32,7 @@ export class SocketService implements app.ISocketService {
     this.stream.onClose(() => {
       this.connected = false;
       if (this.shouldReconnect) {
-        this.$timeout(() => this.connect(url), 1000);
+        this.$timeout(() => this.connect(), 1000);
       }
     });
   }

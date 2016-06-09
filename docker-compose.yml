@@ -1,18 +1,27 @@
 version: '2'
 services:
   web:
-    build: ./frontend
-    ports:
-     - "5555:5555"
+    image: nginx
+    links:
+      - app:app
     volumes:
-     - ./frontend/dist:/var/www
+     - ./frontend/dist:/var/www/html
+     - ./frontend/nginx:/etc/nginx/conf.d
     depends_on:
      - app
+    ports:
+     - "80:80"
   app:
     build: ./backend
+    environment:
+      - RETHINK_HOST=thaipydemo_rethink_1
     expose:
-      - 8000
+      - 8001
+    ports:
+      - "8001:8001"
     depends_on:
       - rethink
   rethink:
     image: rethinkdb
+    ports:
+      - "8080:8080"
