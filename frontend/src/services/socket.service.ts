@@ -40,13 +40,6 @@ export class SocketService implements app.ISocketService {
     this.stream.close();
   }
 
-  disconnect() {
-    this.shouldReconnect = false;
-    if (this.connected) {
-      this.stream.close();
-    }
-  }
-
   sendMessage(message) {
     this.$log.debug('sending message:', message);
     if (this.connected){
