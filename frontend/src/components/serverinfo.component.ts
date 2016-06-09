@@ -12,13 +12,18 @@ class ServerInfoController {
 export const serverInfoComponent: ng.IComponentOptions = {
   template:
     `<div class="server-info">
-      You are connected to {{ $ctrl.SocketService.serverName }}
-      <button ng-if="$ctrl.SocketService.connected" ng-click="$ctrl.disconnect()">
+      <span ng-if="$ctrl.SocketService.connected">
+        You are connected to {{ $ctrl.SocketService.serverName }}
+        <button ng-click="$ctrl.disconnect()">
           Disconnect
-      </button>
-      <button ng-if="!$ctrl.SocketService.connected" ng-click="$ctrl.reconnect()">
+        </button>
+      </span>
+      <span ng-if="!$ctrl.SocketService.connected">
+        You are disconnected.
+        <button ng-click="$ctrl.reconnect()">
           Reconnect
-      </button>
+        </button>
+      </span>
     </div>
     `,
   controller: ServerInfoController
