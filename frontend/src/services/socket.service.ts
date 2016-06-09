@@ -22,7 +22,7 @@ export class SocketService implements app.ISocketService {
   }
 
   connect() {
-    const WS_URL = `ws://${this.$location.host()}:${this.$location.port()}/ws`;
+    const WS_URL = 'ws://localhost:8000/ws';
     this.stream = this.$websocket(WS_URL);
     this.stream.onOpen(() => this.onConnect());
     this.stream.onMessage((response) => {
